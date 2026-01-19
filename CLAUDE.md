@@ -208,3 +208,12 @@ Wait for consent; never auto-create ADRs. Group related decisions (stacks, authe
 
 ## Code Standards
 See `.specify/memory/constitution.md` for code quality, testing, performance, security, and architecture principles.
+
+## Active Technologies
+- TypeScript 5.0+ with React 18+ via Next.js 16+ App Router + Next.js 16+, React 18+, Better Auth, Tailwind CSS, SWR/react-query for data fetching (001-todo-frontend-auth)
+- Browser localStorage/sessionStorage for JWT tokens, cookies for session persistence (001-todo-frontend-auth)
+- Python 3.10+ with FastAPI 0.100+ + FastAPI, SQLModel, Pydantic, psycopg2-binary, python-jose[cryptography], uvicorn (001-backend-api-integration)
+- Neon PostgreSQL database accessed via SQLModel ORM with connection pooling (001-backend-api-integration)
+
+## Recent Changes
+- 001-todo-frontend-auth: Added TypeScript 5.0+ with React 18+ via Next.js 16+ App Router + Next.js 16+, React 18+, Better Auth, Tailwind CSS, SWR/react-query for data fetching

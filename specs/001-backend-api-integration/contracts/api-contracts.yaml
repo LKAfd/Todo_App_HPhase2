@@ -1,0 +1,212 @@
+# API Contracts: Todo Web Application Backend
+
+## Task Management Endpoints
+
+### GET /api/tasks
+**Description**: Retrieve all tasks for authenticated user
+**Headers**:
+- Authorization: Bearer {valid JWT token}
+**Response**:
+- 200:
+  ```json
+  {
+    "success": true,
+    "data": [
+      {
+        "id": 1,
+        "title": "string",
+        "description": "string",
+        "completed": false,
+        "user_id": 1,
+        "created_at": "ISO date string",
+        "updated_at": "ISO date string",
+        "deleted_at": "ISO date string (nullable)"
+      }
+    ],
+    "message": "Tasks retrieved successfully",
+    "timestamp": "ISO date string"
+  }
+  ```
+- 401: Unauthorized (invalid/missing JWT)
+- 403: Forbidden (attempting to access another user's tasks)
+
+### POST /api/tasks
+**Description**: Create a new task for authenticated user
+**Headers**:
+- Authorization: Bearer {valid JWT token}
+**Body**:
+```json
+{
+  "title": "string (required, 1-200 chars)",
+  "description": "string (optional, 0-1000 chars)",
+  "completed": "boolean (optional, default: false)"
+}
+```
+**Response**:
+- 201:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "id": 1,
+      "title": "string",
+      "description": "string",
+      "completed": false,
+      "user_id": 1,
+      "created_at": "ISO date string",
+      "updated_at": "ISO date string",
+      "deleted_at": null
+    },
+    "message": "Task created successfully",
+    "timestamp": "ISO date string"
+  }
+  ```
+- 400: Bad Request (validation errors)
+- 401: Unauthorized (invalid/missing JWT)
+
+### GET /api/tasks/{task_id}
+**Description**: Retrieve a specific task by ID
+**Headers**:
+- Authorization: Bearer {valid JWT token}
+**Path Parameter**: task_id (integer)
+**Response**:
+- 200:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "id": 1,
+      "title": "string",
+      "description": "string",
+      "completed": false,
+      "user_id": 1,
+      "created_at": "ISO date string",
+      "updated_at": "ISO date string",
+      "deleted_at": "ISO date string (nullable)"
+    },
+    "message": "Task retrieved successfully",
+    "timestamp": "ISO date string"
+  }
+  ```
+- 401: Unauthorized (invalid/missing JWT)
+- 403: Forbidden (attempting to access another user's task)
+- 404: Task not found
+
+### PUT /api/tasks/{task_id}
+**Description**: Update an existing task
+**Headers**:
+- Authorization: Bearer {valid JWT token}
+**Path Parameter**: task_id (integer)
+**Body**:
+```json
+{
+  "title": "string (optional, 1-200 chars)",
+  "description": "string (optional, 0-1000 chars)",
+  "completed": "boolean (optional)"
+}
+```
+**Response**:
+- 200:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "id": 1,
+      "title": "string",
+      "description": "string",
+      "completed": false,
+      "user_id": 1,
+      "created_at": "ISO date string",
+      "updated_at": "ISO date string",
+      "deleted_at": null
+    },
+    "message": "Task updated successfully",
+    "timestamp": "ISO date string"
+  }
+  ```
+- 400: Bad Request (validation errors)
+- 401: Unauthorized (invalid/missing JWT)
+- 403: Forbidden (attempting to access another user's task)
+- 404: Task not found
+
+### DELETE /api/tasks/{task_id}
+**Description**: Soft delete a task (set deleted_at timestamp)
+**Headers**:
+- Authorization: Bearer {valid JWT token}
+**Path Parameter**: task_id (integer)
+**Response**:
+- 200:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "id": 1,
+      "title": "string",
+      "deleted_at": "ISO date string"
+    },
+    "message": "Task deleted successfully",
+    "timestamp": "ISO date string"
+  }
+  ```
+- 401: Unauthorized (invalid/missing JWT)
+- 403: Forbidden (attempting to access another user's task)
+- 404: Task not found
+
+### PATCH /api/tasks/{task_id}/toggle
+**Description**: Toggle task completion status
+**Headers**:
+- Authorization: Bearer {valid JWT token}
+**Path Parameter**: task_id (integer)
+**Response**:
+- 200:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "id": 1,
+      "completed": true,
+      "updated_at": "ISO date string"
+    },
+    "message": "Task completion toggled successfully",
+    "timestamp": "ISO date string"
+  }
+  ```
+- 401: Unauthorized (invalid/missing JWT)
+- 403: Forbidden (attempting to access another user's task)
+- 404: Task not found
+
+## Authentication Endpoints
+
+### POST /api/auth/verify
+**Description**: Verify JWT token and return user information
+**Headers**:
+- Authorization: Bearer {JWT token}
+**Response**:
+- 200:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "user_id": 1,
+      "external_id": "string",
+      "email": "string",
+      "name": "string"
+    },
+    "message": "Token verified successfully",
+    "timestamp": "ISO date string"
+  }
+  ```
+- 401: Unauthorized (invalid/missing JWT)
+
+## Error Response Format
+
+**Standard Error Response**:
+- 4xx/5xx:
+  ```json
+  {
+    "success": false,
+    "data": null,
+    "message": "Descriptive error message",
+    "timestamp": "ISO date string"
+  }
+  ```
